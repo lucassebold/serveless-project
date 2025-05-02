@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Debug Serverless Offline",
+        "runtimeExecutable": "node",
+        "args": [
+          "--inspect",
+          "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
+          "offline",
+          "start"
+        ],
+        "env": {
+          "TS_NODE_PROJECT": "tsconfig.json"
+        },
+        "sourceMaps": true,
+        "skipFiles": ["<node_internals>/**"],
+        "outFiles": ["${workspaceFolder}/**/*.js"],
+        "cwd": "${workspaceFolder}",
+        "console": "integratedTerminal",
+        "autoAttachChildProcesses": true,
+        "restart": true,
+        "internalConsoleOptions": "neverOpen"
+      }
+    ]
+  }
+  
