@@ -18,7 +18,8 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
-      POSTS_TABLE: '${self:service}-posts-${self:provider.stage}'
+      POSTS_TABLE: '${self:service}-posts-${self:provider.stage}',
+      POST_QUEUE_URL: { 'Ref': 'PostQueue' }
     },
     logs: {
       restApi: {
@@ -41,6 +42,15 @@ const serverlessConfiguration: AWS = {
             ],
             Resource: [
               { "Fn::GetAtt": ["PostsTable", "Arn"] }
+            ],
+          },
+          {
+            Effect: 'Allow',
+            Action: [
+              'sqs:SendMessage'
+            ],
+            Resource: [
+              { "Fn::GetAtt": ["PostQueue", "Arn"] }
             ]
           }
         ]
@@ -55,6 +65,18 @@ const serverlessConfiguration: AWS = {
         {
           http: {
             path: 'posts',
+            method: 'post',
+          },
+        },
+      ],
+    },
+    schedulePosts: {
+      handler: 'src/functions/handlers/schedulePosts.schedulePosts',
+      events: [
+        {
+          // schedule: 'rate(1 minute)',
+          http: {
+            path: 'schedule',
             method: 'post',
           },
         },
@@ -94,6 +116,12 @@ const serverlessConfiguration: AWS = {
               KeyType: 'HASH'
             }
           ]
+        }
+      },
+      PostQueue: {
+        Type: 'AWS::SQS::Queue',
+        Properties: {
+          QueueName: 'PostQueue'
         }
       }
     }

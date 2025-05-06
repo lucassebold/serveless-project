@@ -7,7 +7,7 @@ const client = new DynamoDBClient({});
 export const createPost: APIGatewayProxyHandler = async (event) => {
     try {
         console.log('Starting createPost function');
-        debugger;  // This will force a break
+        // debugger;  // This will force a break
         const body = JSON.parse(event.body || '{}');
 
         const id = uuidv4();
@@ -17,13 +17,13 @@ export const createPost: APIGatewayProxyHandler = async (event) => {
 
         console.log(process.env.IS_OFFLINE);  // Should log 'true' if .env file has IS_OFFLINE=true
 
-        await client.send(new PutItemCommand({
-            TableName: 'Posts',
-            Item: {
-                id: { S: id },
-                title: { S: title },
-            }
-        }));
+        // await client.send(new PutItemCommand({
+        //     TableName: 'Posts',
+        //     Item: {
+        //         id: { S: id },
+        //         title: { S: title },
+        //     }
+        // }));
 
         return {
             statusCode: 200,
