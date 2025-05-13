@@ -16,6 +16,7 @@
     "@aws-sdk/lib-dynamodb": "^3.798.0",
     "@middy/core": "^3.4.0",
     "@middy/http-json-body-parser": "^3.4.0",
+    "axios": "^1.9.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {

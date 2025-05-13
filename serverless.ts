@@ -46,9 +46,7 @@ const serverlessConfiguration: AWS = {
           },
           {
             Effect: 'Allow',
-            Action: [
-              'sqs:SendMessage'
-            ],
+            Action: ['sqs:*'],
             Resource: [
               { "Fn::GetAtt": ["PostQueue", "Arn"] }
             ]
@@ -57,7 +55,7 @@ const serverlessConfiguration: AWS = {
       }
     }
   },
-  // import the function via paths
+
   functions: {
     createPost: {
       handler: 'src/functions/handlers/createPost.createPost',
@@ -74,14 +72,21 @@ const serverlessConfiguration: AWS = {
       handler: 'src/functions/handlers/schedulePosts.schedulePosts',
       events: [
         {
-          // schedule: 'rate(1 minute)',
-          http: {
-            path: 'schedule',
-            method: 'post',
-          },
+          schedule: 'rate(1 minute)',
         },
       ],
     },
+    publishPost: {
+      handler: 'src/functions/handlers/publishPost.publishPost',
+      events: [
+        {
+          sqs: {
+            arn: { "Fn::GetAtt": ["PostQueue", "Arn"] }
+          }
+        }
+      ]
+    }
+
   },
   package: { individually: true },
   custom: {
